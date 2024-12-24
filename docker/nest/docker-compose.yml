@@ -1,0 +1,78 @@
+# This is the configuration @ajhalili2006 uses for deploying some of RecapTime.dev's infra
+# over Hack Club Nest. The contents of the stack.env is only available at the original
+# private repository due to security reasons.
+
+services:
+  # Database services
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      TBD: true
+  mysql:
+    networks:
+    - rtdev_internal
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${INFRAOPS_MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${INFRAOPS_MYSQL_USER}
+      MYSQL_PASSWORD: ${INFRAOPS_MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${INFRAOPS_MYSQL_DATABASE}
+    volumes:
+      - mysql-data:/var/lib/mysql
+  redis:
+    image: redis:alpine
+    command: --save 60 1 --loglevel warning --requirepass ${INFRAOPS_REDIS_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis-data:/redis:/data
+  
+  vault:
+    image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly-20241224033941
+    env_file:
+      - stack-vaultwarden.env
+    volumes:
+      - vw-data:/data
+    ports:
+      - 34095:8080
+    environment:
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
+      - DATABASE_URL=${VAULTWARDEN_DATABASE_URL}
+      - DOMAIN=https://vault.recaptime.dev
+      - ENABLE_ADMIN=true
+      - INVITATION_ORG_NAME=RecapTime.dev
+      - PORT=8080
+      - RSA_CONTENT=${VAULTWARDEN_RSA_CONTENT}
+      - SMTP_FROM=${VAULTWARDEN_SMTP_FROM}
+      - SMTP_FROM_NAME="Vaultwarden Notifications | Recap Time Squad"
+      - SMTP_HOST=${VAULTWARDEN_SMTP_HOST}
+      - SMTP_PASSWORD=${VAULTWARDEN_SMTP_PASSWORD}
+      - SMTP_PORT=${VAULTWARDEN_SMTP_PORT}
+      - SMTP_SECURITY=${VAULTWARDEN_SMTP_SECURITY}
+      - SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME}
+      - YUBICO_CLIENT_ID=${VAULTWARDEN_YUBICO_CLIENT_ID}
+      - YUBICO_SECRET_KEY=${VAULTWARDEN_YUBICO_SECRET_KEY}
+
+networks:
+  rtdev_internal:
+    external:
+      name: recaptime-dev
+
+volumes:
+  tsdproxy-datadir:
+  postgres-data:
+  mysql-data:
+  redis-data:
+  ghost-data:
+    external:
+      name: ghost-data-recaptimedev
+  vw-data:
