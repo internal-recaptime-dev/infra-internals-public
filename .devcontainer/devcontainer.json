@@ -2,10 +2,12 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-in-docker
 {
 	"name": "@recaptime-dev/infra-internals",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
-
+	"runArgs": ["--device=/dev/net/tun"],
 	"features": {
+		"ghcr.io/tailscale/codespace/tailscale": {
+			"version": "latest"
+		},
 		"ghcr.io/devcontainers/features/github-cli:1": {
 			"installDirectlyFromGitHubRelease": true,
 			"version": "latest"
@@ -47,18 +49,37 @@
 				"ms-azuretools.vscode-docker",
 				"exiasr.hadolint"
 			]
+		},
+		// GitHub Codespaces config
+		"codespaces": {
+			"repositories": {
+				"internal-recaptime-dev/*": {
+					"permissions": {
+						"actions": "write",
+						"workflows": "write",
+						"contents": "write",
+						"packages": "write",
+						"statuses": "read",
+						"checks": "read",
+						"issues": "write",
+						"pull_requests": "write",
+						"deployments": "write"
+					}
+				},
+				"recaptime-dev/infraops": {
+					"permissions": {
+						"actions": "write",
+						"workflows": "write",
+						"contents": "write",
+						"packages": "write",
+						"statuses": "read",
+						"checks": "read",
+						"issues": "write",
+						"pull_requests": "write",
+						"deployments": "write"
+					}
+				}
+			}
 		}
 	}
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "docker --version",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
