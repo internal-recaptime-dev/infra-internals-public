@@ -1,0 +1,40 @@
+name: Repo Sync
+on:
+  push:
+    branches: [main]
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    if: github.repository == 'internal-recaptime-dev/infra-internals'
+    steps:
+      - name: Get secrets from Doppler as secrets
+        id: doppler
+        uses: dopplerhq/secrets-fetch-action@8ac64b8ccc134fdf67414464dadf61255d71d34c
+        with:
+          doppler-token: ${{ secrets.DOPPLER_TOKEN }}
+          inject-env-vars: true
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ env.RTDEVBOT_GITHUB_TOKEN }}
+          persist-credentials: true
+          fetch-depth: 0
+          ref: main
+      - run: |
+          git config user.name RecapTimeBot
+          git config user.email service-accounts+github@crew.recaptime.dev
+          git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}github.com/internal-recaptime-dev/infra-internals-public.git
+      - name: Dry-run
+        run: |
+          echo ::group::Running a dry-run of git filter-repo
+          git filter-repo --dry-run --path docker/*/stack.env --invert-paths --force
+          echo ::endgroup::
+
+          echo ::group::Dry run results
+          cat .git/filter-repo/fast-export.original
+          echo
+          cat .git/filter-repo/fast-export.filtered
+          echo ::endgroup::
+      - name: Deploy
+        run: |
+          git filter-repo --path docker/*/stack.env --invert-paths --force
+          git push pub --mirror
