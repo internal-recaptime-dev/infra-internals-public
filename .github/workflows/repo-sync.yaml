@@ -22,13 +22,15 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
           ref: main
-      - run: |
+      - name: Setup
+        run: |
           git config user.name RecapTimeBot
           git config user.email service-accounts+github@crew.recaptime.dev
+          sudo apt update && sudo apt install git-filter-repo -y
       - name: Dry-run
         run: |
           echo ::group::Running a dry-run of git filter-repo
-          git filter-repo --dry-run --path docker/*/stack.env --invert-paths --force
+          git filter-repo --dry-run --path docker/*/stack.env --path config/**/* --invert-paths --force
           echo ::endgroup::
 
           echo ::group::Dry run results
@@ -38,7 +40,7 @@ jobs:
           echo ::endgroup::
       - name: Deploy
         run: |
-          git filter-repo --path docker/*/stack.env --invert-paths --force
+          git filter-repo --path docker/*/stack.env --path config/**/* --invert-paths --force
           git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}github.com/internal-recaptime-dev/infra-internals-public.git
           git push pub --mirror
           git remote remove pub
