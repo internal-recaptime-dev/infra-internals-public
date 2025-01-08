@@ -41,6 +41,6 @@ jobs:
       - name: Deploy
         run: |
           git filter-repo --path docker/*/stack.env --path config/**/* --invert-paths --force
-          git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}github.com/internal-recaptime-dev/infra-internals-public.git
+          git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}@github.com/internal-recaptime-dev/infra-internals-public.git
           git push pub --mirror
           git remote remove pub
