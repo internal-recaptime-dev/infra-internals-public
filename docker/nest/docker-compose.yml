@@ -74,11 +74,11 @@ services:
 
 networks:
   rtdev_internal:
-    external:
-      name: recaptime-dev
+    name: recaptime-dev
+    external: true
   ajhalili2006:
-    external:
-      name: personal-infra
+    name: personal-infra
+    external: true
 
 volumes:
   tsdproxy-datadir:
@@ -86,6 +86,6 @@ volumes:
   mysql-data:
   redis-data:
   ghost-data:
-    external:
-      name: ghost-data-recaptimedev
+    name: ghost-data-recaptimedev
+    external: true
   vw-data:
