@@ -1,10 +1,13 @@
-name: Repo Sync
+name: Repo SyncOps
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    # Only sync fron the main repo
     if: github.repository == 'internal-recaptime-dev/infra-internals'
     steps:
       - name: Get secrets from Doppler as secrets
@@ -22,7 +25,6 @@ jobs:
       - run: |
           git config user.name RecapTimeBot
           git config user.email service-accounts+github@crew.recaptime.dev
-          git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}github.com/internal-recaptime-dev/infra-internals-public.git
       - name: Dry-run
         run: |
           echo ::group::Running a dry-run of git filter-repo
@@ -37,4 +39,6 @@ jobs:
       - name: Deploy
         run: |
           git filter-repo --path docker/*/stack.env --invert-paths --force
+          git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}github.com/internal-recaptime-dev/infra-internals-public.git
           git push pub --mirror
+          git remote remove pub
