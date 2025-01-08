@@ -5,10 +5,18 @@
 services:
   # Database services
   postgres:
+    networks:
+    - rtdev_internal
+    - ajhalili2006
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
-      TBD: true
+      POSTGRES_ROOT_PASSWORD: ${INFRAOPS_POSTGRES_ROOT_PASSWORD}
+      POSTGRES_PASSWORD: ${INFRAOPS_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${INFRAOPS_POSTGRES_USER}
+      POSTGRES_DB: ${INFRAOPS_POSTGRES_DB}
+    ports:
+      - 43919:5432
   mysql:
     networks:
     - rtdev_internal
@@ -21,6 +29,8 @@ services:
       MYSQL_DATABASE: ${INFRAOPS_MYSQL_DATABASE}
     volumes:
       - mysql-data:/var/lib/mysql
+    ports:
+      - 42635:3306
   redis:
     image: redis:alpine
     command: --save 60 1 --loglevel warning --requirepass ${INFRAOPS_REDIS_PASSWORD}
@@ -37,7 +47,7 @@ services:
       - redis-data:/redis:/data
   
   vault:
-    image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly-20241224033941
+    image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly
     env_file:
       - stack-vaultwarden.env
     volumes:
@@ -66,6 +76,9 @@ networks:
   rtdev_internal:
     external:
       name: recaptime-dev
+  ajhalili2006:
+    external:
+      name: personal-infra
 
 volumes:
   tsdproxy-datadir:
