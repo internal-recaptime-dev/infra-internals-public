@@ -30,7 +30,7 @@ jobs:
       - name: Dry-run
         run: |
           echo ::group::Running a dry-run of git filter-repo
-          git filter-repo --dry-run --path docker/*/stack.env --path config/**/* --path stack.env --invert-paths --force
+          git filter-repo --dry-run --sensitive-data-removal --path-glob '*/stack.env' --path stack.env --path-glob 'config/**/*' --force --invert-paths
           echo ::endgroup::
 
           echo ::group::Dry run results
@@ -40,7 +40,7 @@ jobs:
           echo ::endgroup::
       - name: Deploy
         run: |
-          git filter-repo --path docker/*/stack.env --path config/**/* --path stack.env --invert-paths --force
+          git filter-repo --sensitive-data-removal --path-glob '*/stack.env' --path stack.env --path-glob 'config/**/*' --force --invert-paths
           git remote add pub https://RecapTimeBot:${{env.RTDEVBOT_GITHUB_TOKEN}}@github.com/internal-recaptime-dev/infra-internals-public.git
-          git push pub --mirror
+          git push pub --force --mirror
           git remote remove pub
