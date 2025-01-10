@@ -36,7 +36,7 @@ services:
     command: --save 60 1 --loglevel warning --requirepass ${INFRAOPS_NEST_REDIS_PASSWORD}
     restart: unless-stopped
     networks:
-      - internal
+      - rtdev_internal
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       start_period: 20s
@@ -71,6 +71,8 @@ services:
       - SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME}
       - YUBICO_CLIENT_ID=${VAULTWARDEN_YUBICO_CLIENT_ID}
       - YUBICO_SECRET_KEY=${VAULTWARDEN_YUBICO_SECRET_KEY}
+    networks:
+      - rtdev_internal
 
 networks:
   rtdev_internal:
