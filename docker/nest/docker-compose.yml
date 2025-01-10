@@ -33,7 +33,7 @@ services:
       - 42635:3306
   redis:
     image: redis:alpine
-    command: --save 60 1 --loglevel warning --requirepass ${INFRAOPS_REDIS_PASSWORD}
+    command: --save 60 1 --loglevel warning --requirepass ${INFRAOPS_NEST_REDIS_PASSWORD}
     restart: unless-stopped
     networks:
       - internal
