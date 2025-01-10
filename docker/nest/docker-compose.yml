@@ -49,7 +49,7 @@ services:
   vault:
     image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly
     env_file:
-      - stack-vaultwarden.env
+      - stack.env
     volumes:
       - vw-data:/data
     ports:
