@@ -26,7 +26,8 @@ jobs:
         run: |
           git config user.name RecapTimeBot
           git config user.email service-accounts+github@crew.recaptime.dev
-          sudo apt update && sudo apt install git-filter-repo -y
+          sudo wget https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo -O /usr/bin/git-filter-repo
+          sudo chmod +x /usr/bin/git-filter-repo
       - name: Dry-run
         run: |
           echo ::group::Running a dry-run of git filter-repo
