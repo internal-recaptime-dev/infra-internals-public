@@ -8,7 +8,7 @@ services:
     networks:
     - rtdev_internal
     - ajhalili2006
-    image: postgres:18-alpine
+    image: postgres:17-alpine
     restart: unless-stopped
     env_file:
       - db.env
@@ -42,6 +42,7 @@ services:
     volumes:
       - redis-data:/redis:/data
   
+  # services
   vault:
     image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly
     env_file:
@@ -52,6 +53,7 @@ services:
       - 34095:8080
     networks:
       - rtdev_internal
+  # TODO: ADD GHOST?
 
 networks:
   rtdev_internal:
