@@ -50,7 +50,7 @@ services:
     volumes:
       - vw-data:/data
     ports:
-      - 34095:8080
+      - 34095:3000
     networks:
       - rtdev_internal
   # TODO: ADD GHOST?
