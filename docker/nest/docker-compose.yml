@@ -1,6 +1,6 @@
 # This is the configuration @ajhalili2006 uses for deploying some of RecapTime.dev's infra
-# over Hack Club Nest. The contents of the stack.env is only available at the original
-# private repository due to security reasons.
+# over Hack Club Nest. The contents of the env_files as used by the services below is only
+# available at the original private repository due to security reasons.
 
 services:
   # Database services
@@ -65,6 +65,8 @@ services:
       - ghost.env
     ports:
       - 33881:2368
+    volumes:
+      - ghost-data:/var/lib/ghost/content
 
 networks:
   rtdev_internal:
