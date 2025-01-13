@@ -39,8 +39,10 @@ services:
       interval: 30s
       retries: 5
       timeout: 3s
+    ports:
+      - 38247:6379
     volumes:
-      - redis-data:/redis:/data
+      - redis-data:/data
   
   # services
   vault:
@@ -53,7 +55,16 @@ services:
       - 34095:3000
     networks:
       - rtdev_internal
-  # TODO: ADD GHOST?
+  ghost:
+    image: ghost:5-alpine
+    restart: unless-stopped
+    networks:
+      - rtdev_internal
+    env_file:
+      - db.env
+      - ghost.env
+    ports:
+      - 33881:2368
 
 networks:
   rtdev_internal:
