@@ -19,6 +19,7 @@ services:
     - rtdev_internal
     image: mysql:8
     restart: unless-stopped
+    command: ["mysqld", "--innodb-use-native-aio=0"]
     env_file:
       - db.env
     volumes:
