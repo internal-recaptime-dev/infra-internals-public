@@ -1,6 +1,6 @@
 # RecapTime.dev infra internals
 
-> [!info]
+> [!NOTE]
 > Hey you! If you're viewing the [public repo], we have published our infra-related configurations
 > minus any secrets we may have commited there.
 
@@ -15,7 +15,13 @@ For anything else, you might want to check out that linked earlier.
 ## GitOps Infrastructure in a Nutshell
 
 * [Hack Club Nest](./docker/nest/README.md)
-  * Currently where @ajhalili2006 run most of our infra, including our Ghost blog.
+  * Currently where @ajhalili2006 runs most of our infra, including [our Ghost blog](https://blog.recaptime.dev).
+
+## Who Can Access Them?
+
+| Infra | Who's Who? | Why?
+| --- | --- | --- |
+| [Hack Club Nest](https://portainer.ajhalili2006.hackclub.app) | @ajhalili2006 | Portainer instance admin, you know. |
 
 ## License
 
