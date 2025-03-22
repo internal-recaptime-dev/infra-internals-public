@@ -85,6 +85,8 @@ services:
       - "op-connect-data:/home/opuser/.op/data"
     env_file:
       - op-connect.env
+    networks:
+      - rtdev_internal
   op-connect-sync:
     pull_policy: always
     image: 1password/connect-sync:latest
@@ -94,6 +96,8 @@ services:
       - "op-connect-data:/home/opuser/.op/data"
     env_file:
       - op-connect.env
+    networks:
+      - rtdev_internal
 
 networks:
   rtdev_internal:
