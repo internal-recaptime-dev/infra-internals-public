@@ -80,6 +80,7 @@ services:
     image: 1password/connect-api:latest
     ports:
       - "34715:8080"
+      - "46859:8081"
     volumes:
       - "op-connect-data:/home/opuser/.op/data"
     env_file:
@@ -88,7 +89,7 @@ services:
     pull_policy: always
     image: 1password/connect-sync:latest
     ports:
-      - "34716:8080"
+      - "43189:8080"
     volumes:
       - "op-connect-data:/home/opuser/.op/data"
     env_file:
