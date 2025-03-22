@@ -9,6 +9,7 @@ services:
     - rtdev_internal
     - ajhalili2006
     image: postgres:17-alpine
+    pull_policy: always
     restart: unless-stopped
     env_file:
       - db.env
@@ -18,6 +19,7 @@ services:
     networks:
     - rtdev_internal
     image: mysql:8
+    pull_policy: always
     restart: unless-stopped
     command: ["mysqld", "--innodb-use-native-aio=0"]
     env_file:
@@ -28,6 +30,7 @@ services:
       - 42635:3306
   redis:
     image: redis:alpine
+    pull_policy: always
     command: --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     restart: unless-stopped
     networks:
@@ -47,6 +50,7 @@ services:
   
   # services
   vault:
+    pull_policy: always
     image: ghcr.io/recaptime-dev/vaultwarden-docker:nightly
     env_file:
       - vaultwarden.env
@@ -57,6 +61,7 @@ services:
     networks:
       - rtdev_internal
   ghost:
+    pull_policy: always
     image: ghost:5-alpine
     restart: unless-stopped
     networks:
@@ -71,6 +76,7 @@ services:
   
   # 1Password Connect Servers
   op-connect-api:
+    pull_policy: always
     image: 1password/connect-api:latest
     ports:
       - "34715:8080"
@@ -79,6 +85,7 @@ services:
     env_file:
       - op-connect.env
   op-connect-sync:
+    pull_policy: always
     image: 1password/connect-sync:latest
     ports:
       - "34716:8080"
